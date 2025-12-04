@@ -4,27 +4,37 @@ services:
     container_name: auth_postgres
     restart: always
     environment:
-      POSTGRES_USER: authuser
-      POSTGRES_PASSWORD: authpass
-      POSTGRES_DB: authdb
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
       - auth_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U authuser -d authdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   auth-service:
     build: .
     container_name: auth-service
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
       - "8080:8080"
+    volumes:
+      - .:/app
+      - /app/tmp
     environment:
-      DB_HOST: postgres
-      DB_USER: authuser
-      DB_PASSWORD: authpass
-      DB_NAME: authdb
-      DB_PORT: 5432
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_PORT: ${DB_PORT}
+    command: ["air", "-c", "air.toml"]
 
 volumes:
   auth_pgdata:

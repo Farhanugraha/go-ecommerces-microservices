@@ -2,7 +2,9 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+	"os"
 
 	_ "github.com/lib/pq"
 )
@@ -10,17 +12,30 @@ import (
 var DB *sql.DB
 
 func Connect() {
-    connStr := "postgres://postgres:yourpassword@localhost:5432/authdb?sslmode=disable"
+ 
+    user:= os.Getenv("DB_USER")
+    password:= os.Getenv("DB_PASSWORD")
+    host := os.Getenv("DB_HOST")
+    port := os.Getenv("DB_PORT")
+    dbname := os.Getenv("DB_NAME")
 
-    db, err := sql.Open("postgres", connStr)
+    connStr := fmt.Sprintf(
+    "postgres://%s:%s@%s:%s/%s?sslmode=disable",
+    user, password, host, port, dbname,   
+    )
+
+    db, err:= sql.Open("postgres", connStr)
     if err != nil {
         log.Fatal("Cannot open PostgreSQL:", err)
     }
+
     err = db.Ping()
     if err != nil {
         log.Fatal("Cannot connect to PostgreSQL:", err)
     }
 
-    log.Println("Connected to PostgreSQL successfully")
+    log.Println("Connected to PostgreSQL succesfully!")
     DB = db
+
+
 }
