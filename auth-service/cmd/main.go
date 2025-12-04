@@ -10,7 +10,7 @@ func main() {
 
     database.Connect()
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        fmt.Fprintln(w, "Hello this auth service")
+        fmt.Fprintln(w, "Hello this auth service farhan nugraha keren")
     })
 
     log.Println("Auth Service is running on port 8080...")

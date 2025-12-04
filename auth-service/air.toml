@@ -10,6 +10,8 @@ tmp_dir = "tmp"
   include_dir = ["cmd", "internal"]
   delay = 1000
   stop_on_error = true
+  poll = true
+  poll_interval = 500
 
 [log]
   time = true
