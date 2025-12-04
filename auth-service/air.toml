@@ -1,0 +1,8 @@
+[build]
+root = "cmd"
+entrypoint = "go build -o ../tmp/main ."
+include_ext = ["go"]
+exclude_dir = ["tmp"]
+
+[log]
+time = true

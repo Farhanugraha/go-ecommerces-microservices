@@ -1,13 +1,16 @@
 package main
 
 import (
+	"auth-service/internal/database"
 	"fmt"
 	"log"
 	"net/http"
 )
 func main() {
+
+    database.Connect()
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        fmt.Fprintln(w, "Hello from Auth Service")
+        fmt.Fprintln(w, "Hello this auth service")
     })
 
     log.Println("Auth Service is running on port 8080...")

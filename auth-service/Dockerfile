@@ -1,17 +1,12 @@
-FROM golang:1.25.4 AS builder
+FROM golang:1.25.4
 
 WORKDIR /app
+
+COPY go.mod go.sum ./
+RUN go mod download
 
 COPY . .
 
-RUN go build -o auth-service ./cmd/main.go
+RUN go build -o /app/tmp/main ./cmd
 
-FROM debian:stable-slim
-
-WORKDIR /app
-
-COPY --from=builder /app/auth-service .
-
-EXPOSE 8080
-
-CMD ["./auth-service"]
+CMD ["/app/tmp/main"]
